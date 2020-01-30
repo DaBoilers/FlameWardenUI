@@ -25,7 +25,6 @@ class App extends React.Component{
     if (matches != undefined) {
       matches.get().then((doc) => {
         if (doc.data() != undefined && doc.data().Password === this.state.userPass) {
-          console.log("Authorized!")
           this.setState({isAuth: true});
         }
       })
@@ -41,17 +40,15 @@ class App extends React.Component{
     this.setState({userPass: event.target.value})
   }
 
-
   render (){
     if (this.state.isAuth) {
     return (
-    
           <div className="App">
          <link
           href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
           rel="stylesheet"
         />
-        <Navbar></Navbar>
+          <Navbar></Navbar>
           <Switch>
             <Route path="/" exact component={GoogleMap}></Route>
             <Route
