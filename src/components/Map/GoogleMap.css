@@ -1,7 +1,8 @@
 .mapContainer {
-  
-    
-  }
+}
+.marker {
+  background-image: url("droneIcon.png");
+}
 
 .test {
   height: 95vh;

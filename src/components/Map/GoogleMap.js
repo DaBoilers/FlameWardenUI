@@ -44,24 +44,17 @@ class GoogleMap extends React.Component {
       });
     });
 
-    var drone0 = new mapboxgl.Marker().setLngLat([50, 50]).addTo(map);
+    var el = document.createElement("div");
+    el.className = "marker";
+    el.style.backgroundImage = "url('droneIcon.png')";
+
+    var drone0 = new mapboxgl.Marker(el).setLngLat([50, 50]).addTo(map);
 
     firebase
       .database()
-      .ref("drone0/lng")
+      .ref("drone0")
       .on("value", function(snapshot) {
-        console.log(snapshot.val());
-        var lat = drone0.getLngLat().lat;
-        drone0.setLngLat([lat, snapshot.val()]);
-      });
-
-    firebase
-      .database()
-      .ref("drone0/lat")
-      .on("value", function(snapshot) {
-        console.log(snapshot.val());
-        var lng = drone0.getLngLat().lng;
-        drone0.setLngLat([snapshot.val(), lng]);
+        drone0.setLngLat([snapshot.val().lat, snapshot.val().lng]);
       });
   };
 
