@@ -7,14 +7,14 @@ import droneIcon from "./assets/droneIcon.png";
 import db from "./firebaseConfig";
 import "./App.css";
 
-class App extends React.Component{
+class App extends React.Component {
   constructor() {
     super();
     this.state = {
       userEmail: "",
       userPass: "",
-      isAuth : false
-    }
+      isAuth: true
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -22,32 +22,35 @@ class App extends React.Component{
     var usersRef = db.collection("users");
     if (this.state.userEmail != undefined && this.state.userEmail != "") {
       var matches = usersRef.doc(this.state.userEmail);
-    if (matches != undefined) {
-      matches.get().then((doc) => {
-        if (doc.data() != undefined && doc.data().Password === this.state.userPass) {
-          this.setState({isAuth: true});
-        }
-      })
+      if (matches != undefined) {
+        matches.get().then(doc => {
+          if (
+            doc.data() != undefined &&
+            doc.data().Password === this.state.userPass
+          ) {
+            this.setState({ isAuth: true });
+          }
+        });
+      }
     }
-    }
   }
 
-  handleEmailChange = (event) => {
-    this.setState({userEmail: event.target.value})
-  }
+  handleEmailChange = event => {
+    this.setState({ userEmail: event.target.value });
+  };
 
-  handlePassChange = (event) => {
-    this.setState({userPass: event.target.value})
-  }
+  handlePassChange = event => {
+    this.setState({ userPass: event.target.value });
+  };
 
-  render (){
+  render() {
     if (this.state.isAuth) {
-    return (
-          <div className="App">
-         <link
-          href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
-          rel="stylesheet"
-        />
+      return (
+        <div className="App">
+          <link
+            href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
+            rel="stylesheet"
+          />
           <Navbar></Navbar>
           <Switch>
             <Route path="/" exact component={GoogleMap}></Route>
@@ -56,30 +59,41 @@ class App extends React.Component{
               render={() => <DroneInfo droneId={3} />}
             ></Route>
           </Switch>
-          </div>
+        </div>
       );
-      
     } else {
-      return(
-      <div className="App">
-      <form className="base-container" onSubmit={this.handleSubmit}>
-            <img className="logo" src={droneIcon} alt="Drone"/>
+      return (
+        <div className="App">
+          <form className="base-container" onSubmit={this.handleSubmit}>
+            <img className="logo" src={droneIcon} alt="Drone" />
             <div className="form">
-                <div className="form-group">
-                    <input type="text" name="email" placeholder="Email" onChange={this.handleEmailChange}/>  
-                </div>
-                <div className="form-group">
-                    <input type="password" name="password" placeholder="Password" onChange={this.handlePassChange}/>  
-                </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  name="email"
+                  placeholder="Email"
+                  onChange={this.handleEmailChange}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  onChange={this.handlePassChange}
+                />
+              </div>
             </div>
             <div className="footer">
-                <button type="button" className="btn" onClick={this.handleSubmit}>Login</button>
+              <button type="button" className="btn" onClick={this.handleSubmit}>
+                Login
+              </button>
             </div>
-            </form>
-    </div>);
+          </form>
+        </div>
+      );
     }
   }
-  
 }
 
 export default App;
