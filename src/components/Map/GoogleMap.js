@@ -1,8 +1,10 @@
 import React from "react";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import "./GoogleMap.css";
+
 import db from "../../firebaseConfig";
 import { Marker } from "react-simple-maps";
+var image01 = require("../../assets/droneIcon.png");
 var firebase = require("firebase/app");
 require("firebase/auth");
 require("firebase/database");
@@ -16,9 +18,9 @@ class GoogleMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lng: 5,
-      lat: 34,
-      zoom: 2
+      lng: 50,
+      lat: 50,
+      zoom: 10
     };
   }
 
@@ -45,18 +47,41 @@ class GoogleMap extends React.Component {
     });
 
     var el = document.createElement("div");
-    el.className = "marker";
-    el.style.backgroundImage = "url('droneIcon.png')";
+    el.className = 'marker';
+    // el.style.backgroundImage = 'url(https://cdn1.iconfinder.com/data/icons/appliance-1/100/Drone-07-512.png)';
+    // el.style.width = "500px";
+    // el.style.height = "500px";
 
-    var drone0 = new mapboxgl.Marker(el).setLngLat([50, 50]).addTo(map);
+    console.log(el.style.backgroundImage);
+    console.log(image01);
+    
+    var drones = {};
+
+
 
     firebase
       .database()
-      .ref("drone0")
-      .on("value", function(snapshot) {
-        drone0.setLngLat([snapshot.val().lat, snapshot.val().lng]);
+      .ref("drones")
+      .on("child_added", function(snapshot) {
+        
+        var drone = new mapboxgl.Marker().setLngLat([snapshot.val().lat, snapshot.val().lng]).addTo(map);
+
+        drones[snapshot.val().id] = drone;
+      });
+
+
+
+      firebase
+      .database()
+      .ref("drones")
+      .on("child_changed", function(snapshot) {
+        drones[snapshot.val().id].setLngLat([snapshot.val().lat, snapshot.val().lng]);
       });
   };
+
+
+
+
 
   onMapLoaded(event) {
     event.map.resize();
