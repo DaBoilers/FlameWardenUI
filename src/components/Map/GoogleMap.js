@@ -26,12 +26,10 @@ class GoogleMap extends React.Component {
 
   componentDidMount = () => {
     const { lng, lat, zoom } = this.state;
-
-    var droneList = [];
-
+    
     const map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: "mapbox://styles/mapbox/streets-v9",
+      style: 'mapbox://styles/mapbox/satellite-v9',
       center: [lng, lat],
       zoom: zoom
     });
@@ -42,41 +40,58 @@ class GoogleMap extends React.Component {
       this.setState({
         lng: lng.toFixed(4),
         lat: lat.toFixed(4),
-        zoom: map.getZoom().toFixed(2)
+        zoom: map.getZoom().toFixed(2),
       });
     });
 
-    var el = document.createElement("div");
-    el.className = 'marker';
-    // el.style.backgroundImage = 'url(https://cdn1.iconfinder.com/data/icons/appliance-1/100/Drone-07-512.png)';
-    // el.style.width = "500px";
-    // el.style.height = "500px";
-
-    console.log(el.style.backgroundImage);
-    console.log(image01);
-    
     var drones = {};
+    var fires = {};
 
-
-
+    
     firebase
       .database()
       .ref("drones")
       .on("child_added", function(snapshot) {
         
-        var drone = new mapboxgl.Marker().setLngLat([snapshot.val().lat, snapshot.val().lng]).addTo(map);
+        var el = document.createElement("div");
+        el.className = 'marker';
 
+        var drone = new mapboxgl.Marker(el).setLngLat([snapshot.val().lat, snapshot.val().lng]).addTo(map);
         drones[snapshot.val().id] = drone;
-      });
+    });
 
+    firebase
+    .database()
+    .ref("drones")
+    .on("child_changed", function(snapshot) {
+      drones[snapshot.val().id].setLngLat([snapshot.val().lat, snapshot.val().lng]);
+    });
 
-
-      firebase
+    firebase
       .database()
-      .ref("drones")
-      .on("child_changed", function(snapshot) {
-        drones[snapshot.val().id].setLngLat([snapshot.val().lat, snapshot.val().lng]);
-      });
+      .ref("fires")
+      .on("child_added", function(snapshot) {
+        
+        var fir = document.createElement("div");
+        fir.className = 'fire';
+
+        var fire = new mapboxgl.Marker(fir).setLngLat([snapshot.val().lat, snapshot.val().lng]).addTo(map);
+        fires[snapshot.val().id] = fire;
+    });
+
+
+    /* the fires aren't going to be moving around, so 
+     * we don't need this for now. If we want to modify 
+     * the program so the fires can move, 
+     * the code is right here \/\/\/.
+    // firebase
+    // .database()
+    // .ref("fires")
+    // .on("child_changed", function(snapshot) {
+    //   fires[snapshot.val().id].setLngLat([snapshot.val().lat, snapshot.val().lng]);
+    // });
+    */
+
   };
 
 

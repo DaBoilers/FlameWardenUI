@@ -1,11 +1,23 @@
 .mapContainer {
 }
 
-/* .marker {
-  size: "small";
-} */
+.marker {
+  background-image: url('droneIcon.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
 
-
+.fire {
+  background-image: url('fireIcon.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
 
 .test {
   height: 95vh;
