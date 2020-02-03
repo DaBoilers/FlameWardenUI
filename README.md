@@ -2,6 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Flame Warden
 
+If you clone this repository to your browser and have react installed on your machine, simply enter npm start to display the UI on a local host!
+
 In the project directory, you can run:
 
 ### `npm start`
