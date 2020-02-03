@@ -24,6 +24,10 @@ class GoogleMap extends React.Component {
     };
   }
 
+  //this function enables the react app of the map to be interactive and dynamic.
+  //whenever a drone moves, its icon will move on the map, and whenever it adds a new
+  //fire location to the real time database, it will appear without the user needing 
+  //to refresh the page.
   componentDidMount = () => {
     const { lng, lat, zoom } = this.state;
     
@@ -34,6 +38,7 @@ class GoogleMap extends React.Component {
       zoom: zoom
     });
 
+    //this enables the map to be moved around by the user.
     map.on("move", () => {
       const { lng, lat } = map.getCenter();
 
@@ -44,10 +49,14 @@ class GoogleMap extends React.Component {
       });
     });
 
+    //these two dictionaries are used to store
+    //all of the drone and fire icons with unique 
+    //id's or "keys", so they can instantly be referenced.
     var drones = {};
     var fires = {};
 
-    
+    //this checks for new drones being added to the system, 
+    //while it is running
     firebase
       .database()
       .ref("drones")
@@ -60,6 +69,8 @@ class GoogleMap extends React.Component {
         drones[snapshot.val().id] = drone;
     });
 
+    //this checks for when a drone's location in the database moves,
+    //and it then updates that drone's icon on the map
     firebase
     .database()
     .ref("drones")
@@ -67,6 +78,9 @@ class GoogleMap extends React.Component {
       drones[snapshot.val().id].setLngLat([snapshot.val().lat, snapshot.val().lng]);
     });
 
+
+    //this checks for new fires being added to the database by the drones,
+    //and then plots those fire icons onto the map.
     firebase
       .database()
       .ref("fires")
@@ -82,8 +96,9 @@ class GoogleMap extends React.Component {
 
     /* the fires aren't going to be moving around, so 
      * we don't need this for now. If we want to modify 
-     * the program so the fires can move, 
-     * the code is right here \/\/\/.
+     * the program so the drone can potentially update the fire's location,
+     * we have include the code for that below:
+     * 
     // firebase
     // .database()
     // .ref("fires")
@@ -94,14 +109,12 @@ class GoogleMap extends React.Component {
 
   };
 
-
-
-
-
   onMapLoaded(event) {
     event.map.resize();
   }
 
+
+  //this function renders the map into the web page
   render() {
     const { lng, lat, zoom } = this.state;
 
