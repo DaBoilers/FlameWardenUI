@@ -28,7 +28,6 @@ class App extends React.Component {
             doc.data() != undefined &&
             doc.data().Password === this.state.userPass
           ) {
-            console.log("Authorized!");
             this.setState({ isAuth: true });
           }
         });
