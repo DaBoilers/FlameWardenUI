@@ -1,6 +1,9 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Flame Warden Logo](https://hackster.imgix.net/uploads/attachments/1065834/_xlCziGunRs.blob?auto=compress%2Cformat&w=900&h=675&fit=min)
 
-## Flame Warden
+# Purpose
+This code runs in tangent with Flame Warden project. Flame Warden is a data aggregation tools for first responders. This project was submitted in part for the NXP Hovergames. For more information on the project, [check here](https://www.hackster.io/flame-warden/flame-warden-658163).
+
+# Setup
 
 If you clone this repository to your browser and have react installed on your machine, simply enter npm start to display the UI on a local host!
 
